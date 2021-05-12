@@ -11,7 +11,7 @@
         商品名を入力してください。<br>
         <input type="text" name="name" style="width:200px"><br>
         価格を入力してください。<br>
-        <input type="text" name="prive" style="width:50px"><br>
+        <input type="text" name="price" style="width:50px"><br>
         <br>
         <input type="button" onclick="history.back()" value="戻る">
         <input type="submit" value="OK">
