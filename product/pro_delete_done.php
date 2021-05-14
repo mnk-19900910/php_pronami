@@ -8,6 +8,7 @@
     <?php
         try {
             $pro_code=$_POST['code'];
+            $pro_gazou_name=$_POST['gazou_name'];
             // DB接続
             $dsn='mysql:dbname=shop;host=localhost;charset=utf8';
             $user='root';
@@ -21,7 +22,7 @@
             $stmt->execute($data);
             // DB切断
             $dbh=null;
-    
+            if($pro_gazou_name!='') unlink('./gazou/'.$pro_gazou_name);
         }
         catch(Exception $e){
             print 'データベースの障害。<br>';
