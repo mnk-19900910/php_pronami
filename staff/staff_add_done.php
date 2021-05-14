@@ -1,3 +1,4 @@
+<?php include '../session.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,6 +28,7 @@
             // DB切断
             $dbh=null;
     
+
             print $staff_name;
             print 'さんを追加しました。<br>';
         }

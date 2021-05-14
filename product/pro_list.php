@@ -1,3 +1,4 @@
+<?php include '../session.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,5 +42,7 @@
             exit();
         }
     ?>
+    <br>
+    <a href="../staff_login/staff_top.php">トップメニューへ</a><br>
 </body>
 </html>
