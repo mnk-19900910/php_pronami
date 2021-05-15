@@ -7,10 +7,13 @@
 </head>
 <body>
     <?php
-        $pro_code=$_POST['code'];
-        $pro_name=$_POST['name'];
-        $pro_price=$_POST['price'];
-        $pro_gazou_name_old=$_POST['gazou_name_old'];
+        require_once('../common/common.php');
+
+        $post=sanitize($_POST);
+        $pro_code=$post['code'];
+        $pro_name=$post['name'];
+        $pro_price=$post['price'];
+        $pro_gazou_name_old=$post['gazou_name_old'];
         $pro_gazou=$_FILES['gazou'];
 
         $pro_code=htmlspecialchars($pro_code,ENT_QUOTES,'UTF-8');
