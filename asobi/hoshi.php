@@ -12,9 +12,10 @@
         $hoshi['M42']='オリオン大星雲';
         $hoshi['M45']='昴';
         $hoshi['M57']='ドーナツ星雲';
-        print 'あなたが選んだ星は、';
-        print $hoshi[$mbango];
-        print 'です';
+        foreach($hoshi as $key => $val){
+            print $key.'は'.$val.'<br>';
+        }
+        print 'あなたが選んだ星は、'.$hoshi[$mbango].'です';
     ?>
 </body>
 </html>
