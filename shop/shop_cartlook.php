@@ -20,6 +20,10 @@ if(isset($_SESSION['member_login'])==false){
     <?php
         try {
             $cart=$_SESSION['cart'];
+            $kazu=$_SESSION['kazu'];
+            // var_dump($cart);
+            // var_dump($kazu);
+            // exit();
             $max=count($cart);
             // DB接続
             $dsn='mysql:dbname=shop;host=localhost;charset=utf8';
@@ -48,13 +52,18 @@ if(isset($_SESSION['member_login'])==false){
         }
     ?>
     カートの中身<br><br>
-    <?php for($i=0;$i<$max;$i++){ ?>
-    <?php      print $pro_name[$i]; ?>
-    <?php      print $pro_gazou[$i]; ?>
-    <?php      print $pro_price[$i].'円'; ?>
-    <?php      print '<br>'; ?>
-    <?php } ?>
-    <form>
+    <form method="post" action="kazu_change.php">
+        <?php for($i=0;$i<$max;$i++){ ?>
+        <?php      print $pro_name[$i]; ?>
+        <?php      print $pro_gazou[$i]; ?>
+        <?php      print $pro_price[$i]; ?>円
+        <input type="text" name="kazu<?php print $i; ?>" value="<?php print $kazu[$i]; ?>">
+        合計：<?php print $pro_price[$i]*$kazu[$i]; ?>円
+        <br>
+        <?php      print '<br>'; ?>
+        <?php } ?>
+        <input type="hidden" name="max" value="<?php print $max; ?>">
+        <input type="submit" value="数量変更"><br>    
         <input type="button" onclick="history.back()" value="戻る">
     </form>
 </body>

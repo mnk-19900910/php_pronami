@@ -22,9 +22,12 @@ if(isset($_SESSION['member_login'])==false){
             $pro_code=$_GET['procode'];
             if(isset($_SESSION['cart'])==true) {
                 $cart=$_SESSION['cart']; //現在のカート内容を$cartにコピー
+                $kazu=$_SESSION['kazu'];
             }
             $cart[]=$pro_code; //カートに商品追加
+            $kazu[]=1;
             $_SESSION['cart']=$cart; //$_SESSIONにカートを保管する
+            $_SESSION['kazu']=$kazu;
         }
         catch(Exception $e){
             print 'データベースの障害。<br>';
