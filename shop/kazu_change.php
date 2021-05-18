@@ -10,6 +10,11 @@
             print '<a href="shop_cartlook.php">カートに戻る</a>';
             exit();
         }
+        if($post['kazu'.$i]<1 || $post['kazu'.$i]>9){
+            print '数量は1個以上10個未満にしてください。<br>';
+            print '<a href="shop_cartlook.php">カートに戻る</a>';
+            exit();
+        }
         $kazu[]=$post['kazu'.$i];
     }
     $cart=$_SESSION['cart'];
