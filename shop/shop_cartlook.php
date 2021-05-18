@@ -19,12 +19,19 @@ if(isset($_SESSION['member_login'])==false){
 <body>
     <?php
         try {
-            $cart=$_SESSION['cart'];
-            $kazu=$_SESSION['kazu'];
+            if (isset($_POST["cart"])){
+                $cart=$_SESSION['cart'];
+                $kazu=$_SESSION['kazu'];
+                $max=count($cart);
+            }else $max=0;
             // var_dump($cart);
             // var_dump($kazu);
             // exit();
-            $max=count($cart);
+            if($max==0){
+                print 'カートに商品が入っていません<br><br>';
+                print '<a href="shop_list.php">商品一覧へ戻る</a>';
+                exit();
+            }
             // DB接続
             $dsn='mysql:dbname=shop;host=localhost;charset=utf8';
             $user='root';
