@@ -19,7 +19,7 @@ if(isset($_SESSION['member_login'])==false){
 <body>
     <?php
         try {
-            if (isset($_POST["cart"])){
+            if(isset($_SESSION['cart'])==true){
                 $cart=$_SESSION['cart'];
                 $kazu=$_SESSION['kazu'];
                 $max=count($cart);
