@@ -7,6 +7,14 @@
     for($i=0;$i<$max;$i++){
         $kazu[]=$post['kazu'.$i];
     }
+    $cart=$_SESSION['cart'];
+    for($i=$max;$i>=0;$i--){
+        if(isset($_POST['sakujo'.$i])==true){
+            array_splice($cart,$i,1);
+            array_splice($kazu,$i,1);
+        }
+    }
+    $_SESSION['cart']=$cart;
     $_SESSION['kazu']=$kazu;
     header('Location:shop_cartlook.php');
     exit();
