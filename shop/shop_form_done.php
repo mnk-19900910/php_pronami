@@ -28,7 +28,70 @@
             print '商品は以下の住所に発送いたします。<br>';
             print $postal1.'-'.$postal2.'<br>';
             print $address.'<br>';
-            print $tel.'<br>';        
+            print $tel.'<br>';
+            
+            $honbun='';
+            $honbun.=$onamae."様\n\nこの度はご注文ありがとうございました。\n";
+            $honbun.="\n";
+            $honbun.="ご注文商品\n";
+            $honbun.="----------------------\n";
+
+            $cart=$_SESSION['cart'];
+            $kazu=$_SESSION['kazu'];
+            $max=count($cart);
+            $dsn='mysql:dbname=shop;host=localhost;charset=utf8';
+            $user='root';
+            $password='';
+            $dbh=new PDO($dsn,$user,$password);
+            $dbh->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+
+            for($i=0;$i<$max;$i++){
+                $sql='SELECT name,price FROM mst_product WHERE code=?';
+                $stmt=$dbh->prepare($sql);
+                $data[0]=$cart[$i];
+                $stmt->execute($data);
+                $rec=$stmt->fetch(PDO::FETCH_ASSOC);
+                $name=$rec['name'];
+                $price=$rec['price'];
+                $suryo=$kazu[$i];
+                $shokei=$price*$suryo;
+
+                $honbun.=$name.' '.$price.'円 x '.$suryo.'個 = '.$shokei."円 \n";
+            }
+            $dbh=null;
+
+            $honbun.="送料は無料です。\n";
+            $honbun.="----------------------\n\n";
+            $honbun.="代金は以下の口座にお振込みください。\n";
+            $honbun.="A銀行 B支店 普通口座１２３４５６７\n";
+            $honbun.="入金確認後、発送いたします。\n\n";
+            $honbun.="**************************\n";
+            $honbun.="〜マッツアカデミー〜\n\n";
+            $honbun.="福岡県福岡市中央区唐人町１−２−３\n";
+            $honbun.="電話 090-1234-5678\n";
+            $honbun.="メール info@mattuacademy.co.jp\n";
+            $honbun.="**************************\n";
+
+            // print '<br>';
+            // print nl2br($honbun);
+
+            // お客様へのメール
+            $title=$onamae.'様　ご注文ありがとうございます。';
+            $header='From:info@mattuacademy.co.jp';
+            $honbun=html_entity_decode($honbun,ENT_QUOTES,'UTF-8');
+            mb_language('Japanese');
+            mb_internal_encoding('UTF-8');
+            mb_send_mail($email,$title,$honbun,$header);
+
+            // お店へのメール
+            $title='お客様からご注文がありました。';
+            $header='From:'.$email;
+            $honbun=html_entity_decode($honbun,ENT_QUOTES,'UTF-8');
+            mb_language('Japanese');
+            mb_internal_encoding('UTF-8');
+            mb_send_mail('info@mattuacademy.co.jp',$title,$honbun,$header);
+
+
         }catch(Exception $e){
             print 'データベースの障害。<br>';
             exit();
