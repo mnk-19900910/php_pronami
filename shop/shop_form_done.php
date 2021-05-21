@@ -60,6 +60,10 @@
                 $honbun.=$name.' '.$price.'円 x '.$suryo.'個 = '.$shokei."円 \n";
             }
 
+            $sql='LOCK TABLES dat_sales WRITE, dat_sales_product WRITE'; //データ処理前のロック
+            $stmt=$dbh->prepare($sql);
+            $stmt->execute($data);
+
             // dat_sales表に注文データを保存する
             $sql='INSERT INTO dat_sales(code_member,name,email,postal1,postal2,address,tel) VALUES(?,?,?,?,?,?,?)';
             $stmt=$dbh->prepare($sql);
@@ -90,6 +94,11 @@
                 $data[]=$kazu[$i];
                 $stmt->execute($data);
             }
+
+            $sql='UNLOCK TABLES'; //データ処理前のロック解除
+            $stmt=$dbh->prepare($sql);
+            $stmt->execute($data);
+
             $dbh=null;
 
             // お客様へのメール本文
@@ -125,11 +134,19 @@
             mb_internal_encoding('UTF-8');
             mb_send_mail('info@mattuacademy.co.jp',$title,$honbun,$header);
 
-
         }catch(Exception $e){
             print 'データベースの障害。<br>';
             exit();
         }
+
+        // 商品購入後カートを空にする
+        $_SESSION=array();
+        if(isset($_COOKIE[session_name()])==true){
+            setcookie(session_name(),'',time()-42000,'/');
+        }
+        session_destroy();
     ?>
+    <br>
+    <a href="shop_list.php">商品画面へ</a>
 </body>
 </html>
