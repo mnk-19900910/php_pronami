@@ -5,9 +5,9 @@ if(isset($_SESSION['member_login'])==false){
     print 'ゲストログイン<br>';
     print '<a href="member_login.html">ログイン画面へ</a><br><br>';
 }else{
-    print $_SESSION['staff_name'];
+    print $_SESSION['member_name'];
     print 'さんログイン中<br><br>';
-    print '<a href="member_logout.html">ログアウト</a><br><br>';
+    print '<a href="member_logout.php">ログアウト</a><br><br>';
 }
 ?>
 <!DOCTYPE html>
