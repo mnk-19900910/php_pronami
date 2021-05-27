@@ -20,6 +20,10 @@
             $postal2=$post['postal2'];
             $address=$post['address'];
             $tel=$post['tel'];
+            $chumon=$post['chumon'];
+            $pass=$post['pass'];
+            $danjo=$post['danjo'];
+            $birth=$post['birth'];
             $ok=true;
     
             print $onamae.'様<br>';
@@ -60,15 +64,40 @@
                 $honbun.=$name.' '.$price.'円 x '.$suryo.'個 = '.$shokei."円 \n";
             }
 
-            $sql='LOCK TABLES dat_sales WRITE, dat_sales_product WRITE'; //データ処理前のロック
+            $sql='LOCK TABLES dat_sales WRITE, dat_sales_product WRITE, dat_member WRITE'; //データ処理前のロック
             $stmt=$dbh->prepare($sql);
             $stmt->execute($data);
+
+            $lastmembercode=0;
+            if($chumon=='chumontouroku'){
+                $sql='INSERT INTO dat_member(password,name,email,postal1,postal2,address,tel,danjo,born) VALUES(?,?,?,?,?,?,?,?,?)';
+                $stmt=$dbh->prepare($sql);
+                $data=array();
+                $data[]=md5($pass);
+                $data[]=$onamae;
+                $data[]=$email;
+                $data[]=$postal1;
+                $data[]=$postal2;
+                $data[]=$address;
+                $data[]=$tel;
+                if($danjo=='dan') $data[]=1;
+                else $data[]=2;
+                $data[]=$birth;
+                $stmt->execute($data);
+
+                // dat_member表に会員登録情報を追加する
+                $sql='SELECT LAST_INSERT_ID()'; //AUTO_INCREMENTで直近に発番された番号を取得
+                $stmt=$dbh->prepare($sql);
+                $stmt->execute();
+                $rec=$stmt->fetch(PDO::FETCH_ASSOC);
+                $lastmembercode=$rec['LAST_INSERT_ID()']; //取得した会員登録コードを$lastmembercodeに格納
+            }
 
             // dat_sales表に注文データを保存する
             $sql='INSERT INTO dat_sales(code_member,name,email,postal1,postal2,address,tel) VALUES(?,?,?,?,?,?,?)';
             $stmt=$dbh->prepare($sql);
             $data=array();
-            $data[]=0;
+            $data[]=$lastmembercode;
             $data[]=$onamae;
             $data[]=$email;
             $data[]=$postal1;
@@ -101,12 +130,23 @@
 
             $dbh=null;
 
+            if($chumon=='chumontouroku'){
+                print '会員登録が完了しました。<br>';
+                print '次回からメールアドレスとパスワードでログインしてください。<br>';
+                print 'ご注文が簡単にできるようになります。<br><br>';
+            }
+
             // お客様へのメール本文
             $honbun.="送料は無料です。\n";
             $honbun.="----------------------\n\n";
             $honbun.="代金は以下の口座にお振込みください。\n";
             $honbun.="A銀行 B支店 普通口座１２３４５６７\n";
             $honbun.="入金確認後、発送いたします。\n\n";
+            if($chumon=='chumontouroku'){
+                $honbun.="会員登録が完了しました。\n";
+                $honbun.="次回からメールアドレスとパスワードでログインしてください。\n";
+                $honbun.="ご注文が簡単にできるようになります。\n\n";
+            }
             $honbun.="**************************\n";
             $honbun.="〜マッツアカデミー〜\n\n";
             $honbun.="福岡県福岡市中央区唐人町１−２−３\n";

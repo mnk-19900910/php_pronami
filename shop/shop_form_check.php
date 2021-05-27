@@ -15,6 +15,11 @@
         $postal2=$post['postal2'];
         $address=$post['address'];
         $tel=$post['tel'];
+        $chumon=$post['chumon'];
+        $pass=$post['pass'];
+        $pass2=$post['pass2'];
+        $danjo=$post['danjo'];
+        $birth=$post['birth'];
         $ok=true;
 
         if($onamae=='') {
@@ -41,6 +46,20 @@
             print '電話番号を正しく入力してください<br><br>';
             $ok=false;
         }else print '電話番号：'.$tel.'<br><br>';
+        if($chumon=='chumontouroku'){
+            if($pass==''){
+                print 'パスワードが入力されていません。<br><br>';
+                $ok=false;
+            }
+            if($pass!=$pass2){
+                print 'パスワードが一致しません。<br><br>';
+                $ok=false;
+            }
+            print '性別<br>';
+            if($danjo=='dan') print '男性<br><br>';
+            else print '女性<br><br>';
+            print '生まれ年<br>'.$birth.'年代<br><br>';
+        }
 
         if($ok==true){
             print '<form method="post" action="shop_form_done.php">';
@@ -50,6 +69,10 @@
             print '<input type="hidden" name="postal2" value="'.$postal2.'">';
             print '<input type="hidden" name="address" value="'.$address.'">';
             print '<input type="hidden" name="tel" value="'.$tel.'">';
+            print '<input type="hidden" name="chumon" value="'.$chumon.'">';
+            print '<input type="hidden" name="pass" value="'.$pass.'">';
+            print '<input type="hidden" name="danjo" value="'.$danjo.'">';
+            print '<input type="hidden" name="birth" value="'.$birth.'">';
             print '<input type="button" onclick="history.back()" value="戻る">';
             print '<input type="submit" value="OK">';
             print '</form>';
